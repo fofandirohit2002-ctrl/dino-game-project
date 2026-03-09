@@ -85,6 +85,10 @@ document.addEventListener("keydown", function(e){
     }
 });
 
+document.addEventListener("touchstart", function(){
+    jump();
+});
+    
 function jump(){
     if(!dino.classList.contains("jump")){
         dino.classList.add("jump");
@@ -129,4 +133,5 @@ gameLoop();
 </script>
 
 </body>
+
 </html>
