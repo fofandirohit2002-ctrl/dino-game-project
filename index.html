@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Dino Game</title>
+
+<style>
+body{
+    background:#f7f7f7;
+    font-family:Arial;
+    text-align:center;
+}
+
+h1{
+    margin-top:20px;
+}
+
+#game{
+    width:800px;
+    height:200px;
+    border-bottom:4px solid black;
+    margin:20px auto;
+    position:relative;
+    overflow:hidden;
+}
+
+#dino{
+    width:50px;
+    height:50px;
+    background:#333;
+    position:absolute;
+    bottom:0;
+    left:50px;
+}
+
+#cactus{
+    width:25px;
+    height:50px;
+    background:green;
+    position:absolute;
+    bottom:0;
+    right:-40px;
+}
+
+.jump{
+    animation:jump 0.5s linear;
+}
+
+@keyframes jump{
+    0%{bottom:0;}
+    50%{bottom:100px;}
+    100%{bottom:0;}
+}
+
+#score{
+    font-size:20px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🦖 Dino Runner Game</h1>
+<div id="score">Score: 0</div>
+
+<div id="game">
+    <div id="dino"></div>
+    <div id="cactus"></div>
+</div>
+
+<script>
+const dino = document.getElementById("dino");
+const cactus = document.getElementById("cactus");
+const scoreText = document.getElementById("score");
+
+let score = 0;
+let cactusPosition = 800;
+let gameOver = false;
+
+/* Jump */
+document.addEventListener("keydown", function(e){
+    if(e.code === "Space"){
+        jump();
+    }
+});
+
+function jump(){
+    if(!dino.classList.contains("jump")){
+        dino.classList.add("jump");
+
+        setTimeout(()=>{
+            dino.classList.remove("jump");
+        },500);
+    }
+}
+
+/* Game Loop */
+function gameLoop(){
+
+    if(gameOver) return;
+
+    cactusPosition -= 6;
+    cactus.style.left = cactusPosition + "px";
+
+    if(cactusPosition < -40){
+        cactusPosition = 800;
+        score++;
+        scoreText.innerHTML = "Score: " + score;
+    }
+
+    let dinoRect = dino.getBoundingClientRect();
+    let cactusRect = cactus.getBoundingClientRect();
+
+    if(
+        dinoRect.right > cactusRect.left &&
+        dinoRect.left < cactusRect.right &&
+        dinoRect.bottom > cactusRect.top
+    ){
+        gameOver = true;
+        alert("Game Over! Score: " + score);
+        location.reload();
+    }
+
+    requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
+</script>
+
+</body>
+</html>
